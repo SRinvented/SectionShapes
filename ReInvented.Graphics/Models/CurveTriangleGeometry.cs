@@ -16,7 +16,7 @@ namespace ReInvented.Graphics.Models
 
         public double Angle { get; set; }
 
-        public TriangleGeometry SmallTriangle => new TriangleGeometry(LargeTriangle.OppositeSide / Math.Cos(Angle.ToRadians()), 90 - Angle);
+        public TriangleGeometry SmallTriangle => new TriangleGeometry(LargeTriangle.Opposite / Math.Cos(Angle.ToRadians()), 90 - Angle);
 
         public TriangleGeometry LargeTriangle => new TriangleGeometry(Radius, Angle);
 

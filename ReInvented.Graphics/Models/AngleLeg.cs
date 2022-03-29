@@ -23,9 +23,9 @@
 
         public double ToeRadius { get; set; } = 0.0;
 
-        public double SlopeWithHorizontal => Slope - 90.0;
+        public double SlopeWithFace => Slope - 90.0;
 
-        public CurveTriangleGeometry ToeGeometry => new CurveTriangleGeometry(ToeRadius, SlopeWithHorizontal);
+        public CurveTriangleGeometry ToeGeometry => new CurveTriangleGeometry(ToeRadius, SlopeWithFace);
 
         public TriangleGeometry MainTriangle { get; set; }
 

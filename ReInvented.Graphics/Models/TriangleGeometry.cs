@@ -17,9 +17,9 @@ namespace ReInvented.Graphics.Models
 
         public double Angle { get; set; }
 
-        public double OppositeSide => Hypotenuse * Math.Sin(Angle.ToRadians());
+        public double Opposite => Hypotenuse * Math.Sin(Angle.ToRadians());
 
-        public double AdjacentSide => Hypotenuse * Math.Cos(Angle.ToRadians());
+        public double Adjacent => Hypotenuse * Math.Cos(Angle.ToRadians());
 
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 
 using ReInvented.Graphics.Interfaces;
@@ -29,8 +30,8 @@ namespace ReInvented.Graphics.Models
 
         public LSectionGeometry(double longLegLength, double shortLegLength, double longLegThickness, double shortLegThickness)
         {
-            LLong = longLegLength;
-            LShort = shortLegLength;
+            LongLegLength = longLegLength;
+            ShortLegLength = shortLegLength;
             TwLong = longLegThickness;
             TwShort = shortLegThickness;
         }
@@ -40,9 +41,9 @@ namespace ReInvented.Graphics.Models
 
         #region Dimensions
 
-        public double LLong { get; set; }
+        public double LongLegLength { get; set; }
 
-        public double LShort { get; set; }
+        public double ShortLegLength { get; set; }
 
         public double TwLong { get; set; }
 
@@ -66,19 +67,15 @@ namespace ReInvented.Graphics.Models
 
         #region Read-only Properties
 
-        public double LongLegSlopeWithHorizontal => LongLegSlope - 90.0;
+        public double LongLegSlopeWithLegFace => LongLegSlope - 90.0;
 
-        public double ShortLegSlopeWithHorizontal => ShortLegSlope - 90.0;
+        public double ShortLegSlopeWithLegFace => ShortLegSlope - 90.0;
 
-        public CurveTriangleGeometry LongLegToeGeometry => new CurveTriangleGeometry(LongLegToeRadius, LongLegSlopeWithHorizontal);
+        public CurveTriangleGeometry LongLegToe => new CurveTriangleGeometry(LongLegToeRadius, LongLegSlopeWithLegFace);
 
-        public CurveTriangleGeometry ShortLegToeGeometry => new CurveTriangleGeometry(ShortLegToeRadius, ShortLegSlopeWithHorizontal);
+        public CurveTriangleGeometry ShortLegToeGeometry => new CurveTriangleGeometry(ShortLegToeRadius, ShortLegSlopeWithLegFace);
 
-        public CurveDualTriangleGeometry RootGeometry => new CurveDualTriangleGeometry(RootRadius, LongLegSlopeWithHorizontal, ShortLegSlopeWithHorizontal);
-
-        public TriangleGeometry LongLegTriangle { get; private set; }
-
-        public TriangleGeometry ShortLegTriangle { get; private set; }
+        public CurveDualTriangleGeometry Root => new CurveDualTriangleGeometry(RootRadius, LongLegSlopeWithLegFace, ShortLegSlopeWithLegFace);
 
         public TriangleGeometry LongLegMainTriangle { get; private set; }
 
@@ -86,7 +83,7 @@ namespace ReInvented.Graphics.Models
 
         public List<IEnumerable<PointEx>> PointsCollection { get; private set; }
 
-///        public AngleLeg LongLeg { get; set; }
+        ///        public AngleLeg LongLeg { get; set; }
 
 
         #endregion
@@ -96,69 +93,62 @@ namespace ReInvented.Graphics.Models
         public void GeneratePoints()
         {
 
-            /// Important:
-            /// Read Vertical as Horizontal and Horizontal as Vertial for Long Leg in Triangles due to the fact that the triangle properties
-            /// are created keeping the I (or) Channel sections in view. For Angles the legs will be perpendicular to each other.
-            /// This is not applicable for Short Leg.
-
             #region Sloped Faces Intersection Point Coordinates Calculation
 
-            /// Note and TODO: Variables' names may found to be voilating the best practices in this section. However, in order to be consisting with
-            /// manual calculation to make the calculations meaningful, these names are used and may be changed later on to fit in to best practices.
+            /// Indicates the horizontal distance to the point where the thickness on the leg is measured.
+            double faceToThicknessLongLeg = (LongLegLength - TwShort) / 2;
+            double faceToThicknessShortLeg = (ShortLegLength - TwLong) / 2;
 
-            double L = Math.Sqrt(((LLong - TwShort) / 2).Squared() + ((LShort - TwLong) / 2).Squared());
+            /// Distances to the intersection point of inclined faces measured from the point where thickness lines intersect.
+            double intersectionAlongLongLeg = (faceToThicknessShortLeg - faceToThicknessLongLeg *
+                                               Math.Tan(LongLegSlopeWithLegFace.ToRadians())) * Math.Tan(ShortLegSlopeWithLegFace.ToRadians()) /
+                                               (1 - (Math.Tan(LongLegSlopeWithLegFace.ToRadians()) * Math.Tan(ShortLegSlopeWithLegFace.ToRadians())));
 
-            double betaL = Math.Atan((LShort - TwLong) / (LLong - TwShort)).ToDegrees();
-            double betaS = 90.0 - betaL; ///Math.Atan((LLong - TwShort) / (LShort - TwLong)).ToDegrees();
+            double intersectionAlongShortLeg = (faceToThicknessLongLeg - intersectionAlongLongLeg) * Math.Tan(LongLegSlopeWithLegFace.ToRadians());
 
-            double thetaL = betaL - LongLegSlopeWithHorizontal;
-            double thetaS = betaS - ShortLegSlopeWithHorizontal;
+            /// Distances to the intersection point of inclined faces measured from the point where outer faces of the legs intersect.
+            intersectionAlongLongLeg = TwShort + intersectionAlongLongLeg;
+            intersectionAlongShortLeg = TwLong + intersectionAlongShortLeg;
 
-            double L1 = L * Math.Tan(thetaL.ToRadians()) / (Math.Tan(thetaL.ToRadians()) + Math.Tan(thetaS.ToRadians())); ///L / (1 + Math.Tan(thetaS / thetaL)); 
-            double L2 = L - L1; /// L * Math.Tan(thetaL.ToRadians()) / (Math.Tan(thetaL.ToRadians()) + Math.Tan(thetaS.ToRadians()));
-
-            double SideL = L2 / Math.Cos(thetaL.ToRadians());
-            double SideS = L1 / Math.Cos(thetaS.ToRadians());
-
-            LongLegTriangle = new TriangleGeometry(SideL, LongLegSlopeWithHorizontal);
-            ShortLegTriangle = new TriangleGeometry(SideS, ShortLegSlopeWithHorizontal);
-
-            double xCoordinate = TwShort + ShortLegTriangle.OppositeSide;
-            double yCoordinate = TwLong + LongLegTriangle.OppositeSide;
-
-            /// Alternative Method
-
-            double LOne = (LLong - TwShort) / 2;
-            double LTwo = (LShort - TwLong) / 2;
-
-            double xCoord = (LTwo - LOne * Math.Tan(LongLegSlopeWithHorizontal.ToRadians())) * Math.Tan(ShortLegSlopeWithHorizontal.ToRadians()) / (1 - (Math.Tan(LongLegSlopeWithHorizontal.ToRadians()) * Math.Tan(ShortLegSlopeWithHorizontal.ToRadians())));
-            double yCoord = (LOne - xCoord) * Math.Tan(LongLegSlopeWithHorizontal.ToRadians());
-
-
-
-
-            double includedAngleAtCenter = 90 - LongLegSlopeWithHorizontal - ShortLegSlopeWithHorizontal;
+            /// Properties of the root curve
+            double includedAngleAtCenter = 90 - LongLegSlopeWithLegFace - ShortLegSlopeWithLegFace;
             double chordLength = 2 * RootRadius * Math.Sin(includedAngleAtCenter.ToRadians() / 2);
-            double includedAngleAtIntersection = 90 + LongLegSlopeWithHorizontal + ShortLegSlopeWithHorizontal;
+            double includedAngleAtIntersection = 90 + LongLegSlopeWithLegFace + ShortLegSlopeWithLegFace;
             double includedAngleAtCurvePoints = (180 - includedAngleAtIntersection) / 2;
 
-            double alignedLengthToCurvePoints = chordLength / 2 / Math.Cos(includedAngleAtCurvePoints.ToRadians());
+            /// Distance to the points where curve intersects the inclined faces measured from the point where inclined faces intersect with each other.
+            double rootIntersectionToCurvePoints = chordLength / 2 / Math.Cos(includedAngleAtCurvePoints.ToRadians());
 
-            double adjacentLong = alignedLengthToCurvePoints * Math.Cos(LongLegSlopeWithHorizontal.ToRadians());
-            double oppositeLong = alignedLengthToCurvePoints * Math.Sin(LongLegSlopeWithHorizontal.ToRadians());
+            /// Length of the inclined face on respective leg measured from the intersection point to the point where thickness is measured on that leg.
+            double sideL = (TwShort + faceToThicknessLongLeg - intersectionAlongLongLeg) / Math.Cos(LongLegSlopeWithLegFace.ToRadians());
+            double sideS = (TwLong + faceToThicknessShortLeg - intersectionAlongShortLeg) / Math.Cos(ShortLegSlopeWithLegFace.ToRadians());
 
-            double adjacentShort = alignedLengthToCurvePoints * Math.Cos(ShortLegSlopeWithHorizontal.ToRadians());
-            double oppositeShort = alignedLengthToCurvePoints * Math.Sin(ShortLegSlopeWithHorizontal.ToRadians());
+            /// Length of the inclined face on the repective leg measured from the root curve intersection point to the point where thickness is measured on that leg.
+            double alignedLegLengthToCurvePointOnLongLeg = sideL - rootIntersectionToCurvePoints;
+            double alignedLegLengthToCurvePointOnShortLeg = sideS - rootIntersectionToCurvePoints;
 
-            double alignedLegLengthToCurvePointOnLongLeg = SideL - alignedLengthToCurvePoints;
-            double alignedLegLengthToCurvePointOnShortLeg = SideS - alignedLengthToCurvePoints;
+            /// Horizontal distance from the point where thickness is measured on the respective leg to the point where inclined face intersects the toe curve.
+            double distanceToThicknessFromToeLongLeg = faceToThicknessLongLeg - (LongLegToeRadius - LongLegToe.LargeTriangle.Opposite);
+            double distanceToThicknessFromToeShortLeg = faceToThicknessShortLeg - (ShortLegToeRadius - ShortLegToeGeometry.LargeTriangle.Opposite);
 
-            double longLegTriangleHypotenuse = alignedLegLengthToCurvePointOnLongLeg + (LOne - (LongLegToeRadius - LongLegToeGeometry.LargeTriangle.OppositeSide)) / Math.Cos(LongLegSlopeWithHorizontal.ToRadians());
-            double shortLegTriangleHypotenuse = alignedLegLengthToCurvePointOnShortLeg + (LTwo - (ShortLegToeRadius - ShortLegToeGeometry.LargeTriangle.OppositeSide)) / Math.Cos(ShortLegSlopeWithHorizontal.ToRadians());
+            /// Total length of the inclined face of respective leg.
+            //double longLegTriangleHypotenuse = alignedLegLengthToCurvePointOnLongLeg + (faceToThicknessLongLeg - (LongLegToeRadius - LongLegToeGeometry.LargeTriangle.Opposite)) / Math.Cos(LongLegSlopeWithLegFace.ToRadians());
+            //double shortLegTriangleHypotenuse = alignedLegLengthToCurvePointOnShortLeg + (faceToThicknessShortLeg - (ShortLegToeRadius - ShortLegToeGeometry.LargeTriangle.Opposite)) / Math.Cos(ShortLegSlopeWithLegFace.ToRadians());
 
-            LongLegMainTriangle = new TriangleGeometry(longLegTriangleHypotenuse, LongLegSlopeWithHorizontal);
-            ShortLegMainTriangle = new TriangleGeometry(shortLegTriangleHypotenuse, ShortLegSlopeWithHorizontal);
 
+            double longLegTriangleHypotenuse = alignedLegLengthToCurvePointOnLongLeg + (distanceToThicknessFromToeLongLeg / Math.Cos(LongLegSlopeWithLegFace.ToRadians()));
+            double shortLegTriangleHypotenuse = alignedLegLengthToCurvePointOnShortLeg + (distanceToThicknessFromToeShortLeg / Math.Cos(ShortLegSlopeWithLegFace.ToRadians()));
+
+
+            LongLegMainTriangle = new TriangleGeometry(longLegTriangleHypotenuse, LongLegSlopeWithLegFace);
+            ShortLegMainTriangle = new TriangleGeometry(shortLegTriangleHypotenuse, ShortLegSlopeWithLegFace);
+
+
+            double heightAtThicknessLongLeg = LongLegMainTriangle.Opposite / LongLegMainTriangle.Adjacent * distanceToThicknessFromToeLongLeg;
+            double heightAtThicknessShortLeg = ShortLegMainTriangle.Opposite / ShortLegMainTriangle.Adjacent * distanceToThicknessFromToeShortLeg;
+
+            double thicknessAtToeLongLeg = TwLong - heightAtThicknessLongLeg;
+            double thicknessAtToeShortLeg = TwShort - heightAtThicknessShortLeg;
 
             #endregion
 
@@ -166,27 +156,58 @@ namespace ReInvented.Graphics.Models
 
             ///#region Leg Slope Main Triangles Properties
 
-            double longLegMainTriangleHorizontal = (LLong - TwShort) / 2 - (LongLegToeRadius - LongLegToeGeometry.LargeTriangle.OppositeSide);
+            ///double mainTriangleHorizontal = (LongLegLength - TwShort) / 2 - (LongLegToeRadius - LongLegToeGeometry.LargeTriangle.Opposite);
 
-            //double longLegMainTriangleHypotenuse = mainTriangleHorizontal / Math.Cos(FlangeSlopeWithHorizontal.ToRadians());
+            List<PointEx> shapePoints = new List<PointEx> { new PointEx(0, 0, PathSegmentType.Line) };
 
-            //LongLegMainTriangle = new TriangleGeometry(mainTriangleHypotenuse, 90 - FlangeSlopeWithHorizontal);
+            shapePoints.Add(new PointEx(thicknessAtToeLongLeg, 0, PathSegmentType.Line));
 
-            //double apexToFlangeThickness = ((B - Tw) / 2) - (ToeRadius - ToeGeometry.LargeTriangle.OppositeSide);
-            //double heightAtFlangeThickness = FlangeTriangle.AdjacentSide * apexToFlangeThickness / FlangeTriangle.OppositeSide;
+            #region Toe - Long Leg
 
+            if (LongLegToeRadius > 0)
+            {
+                shapePoints.Add(new PointEx()
+                {
+                    X = thicknessAtToeLongLeg + LongLegToe.LargeTriangle.Adjacent,
+                    Y = LongLegToeRadius - LongLegToe.LargeTriangle.Opposite,
+                    PathSegmentType = PathSegmentType.Arc,
+                    Radius = LongLegToeRadius,
+                    SweepDirection = SweepDirection.Clockwise
+                });
+            }
 
-            //#endregion
+            #endregion
 
-            ///// Vertical distance to the root intersection with web from nearest flange face.
-            //double heightAtRootIntersection = Tf - heightAtFlangeThickness + FlangeTriangle.AdjacentSide + RootGeometry.LargeTriangle.AdjacentSide;
+            shapePoints.Add(new PointEx()
+            {
+                X = thicknessAtToeLongLeg + LongLegToe.LargeTriangle.Adjacent + LongLegMainTriangle.Opposite,
+                Y = LongLegToeRadius - LongLegToe.LargeTriangle.Opposite + LongLegMainTriangle.Adjacent,
+                PathSegmentType = PathSegmentType.Line
+            });
 
-            //#endregion
+            #region Root
 
+            if (RootRadius > 0)
+            {
+                shapePoints.Add(new PointEx()
+                {
+                    X = thicknessAtToeLongLeg + LongLegToe.LargeTriangle.Adjacent + LongLegMainTriangle.Opposite + Root.LongSideLargeTriangle.Adjacent + Root.ShortSideSmallTriangle.Adjacent,
+                    Y = LongLegToeRadius - LongLegToe.LargeTriangle.Opposite + LongLegMainTriangle.Adjacent - Root.LongSideLargeTriangle.Opposite + RootRadius - Root.ShortSideSmallTriangle.Opposite,
+                    PathSegmentType = PathSegmentType.Arc,
+                    Radius = RootRadius,
+                    SweepDirection = SweepDirection.Counterclockwise
+                });
+            }
 
-            //List<PointEx> shapePoints = new List<PointEx> { new PointEx(0, 0, PathSegmentType.Line) };
+            #endregion
 
-            //shapePoints.Add(new PointEx(TwLong - heightAtLongLegThickness - ToeGeometry.LargeTriangle.Vertical, 0, PathSegmentType.Line));
+            shapePoints.Add(new PointEx()
+            {
+                X = shapePoints[shapePoints.Count - 1].X + ShortLegMainTriangle.Adjacent,
+                Y = shapePoints[shapePoints.Count - 1].Y + ShortLegMainTriangle.Opposite,
+                PathSegmentType = PathSegmentType.Line
+            });
+
 
             //#region Data Required for Points Calculation
 
@@ -303,7 +324,10 @@ namespace ReInvented.Graphics.Models
 
             //#endregion
 
-            ///PointsCollection = shapePoints;
+            PointsCollection = new List<IEnumerable<PointEx>>()
+            {
+                shapePoints
+            };
 
         }
 

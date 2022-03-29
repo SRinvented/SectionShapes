@@ -19,11 +19,11 @@ namespace ReInvented.Graphics.Models
         public double ShortSideAngle { get; set; }
 
 
-        public TriangleGeometry LongSideSmallTriangle => new TriangleGeometry(LongSideLargeTriangle.OppositeSide / Math.Cos(LongSideAngle.ToRadians()), 90 - LongSideAngle);
+        public TriangleGeometry LongSideSmallTriangle => new TriangleGeometry(LongSideLargeTriangle.Opposite / Math.Cos(LongSideAngle.ToRadians()), 90 - LongSideAngle);
 
         public TriangleGeometry LongSideLargeTriangle => new TriangleGeometry(Radius, LongSideAngle);
 
-        public TriangleGeometry ShortSideSmallTriangle => new TriangleGeometry(ShortSideLargeTriangle.OppositeSide / Math.Cos(ShortSideAngle.ToRadians()), 90 - ShortSideAngle);
+        public TriangleGeometry ShortSideSmallTriangle => new TriangleGeometry(ShortSideLargeTriangle.Opposite / Math.Cos(ShortSideAngle.ToRadians()), 90 - ShortSideAngle);
 
         public TriangleGeometry ShortSideLargeTriangle => new TriangleGeometry(Radius, ShortSideAngle);
 
