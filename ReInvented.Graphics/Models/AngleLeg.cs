@@ -25,7 +25,7 @@
 
         public double SlopeWithFace => Slope - 90.0;
 
-        public CurveTriangleGeometry ToeGeometry => new CurveTriangleGeometry(ToeRadius, SlopeWithFace);
+        public CurveTriangleGeometry Toe => new CurveTriangleGeometry(ToeRadius, SlopeWithFace);
 
         public TriangleGeometry MainTriangle { get; set; }
 
