@@ -41,9 +41,9 @@ namespace ReInvented.Graphics.Models
             PathGeometry pathGeometry = new PathGeometry();
             PathFigureCollection pathFigures = new PathFigureCollection();
 
-            foreach (IEnumerable<PointEx> p in _sectionGeometry.PointsCollection)
+            foreach (IEnumerable<ShapePoint> p in _sectionGeometry.PointsCollection)
             {
-                List<PointEx> points = p.ToList();
+                List<ShapePoint> points = p.ToList();
 
                 PathFigure pathFigure = new PathFigure
                 {

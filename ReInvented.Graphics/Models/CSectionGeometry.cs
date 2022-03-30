@@ -57,7 +57,7 @@ namespace ReInvented.Graphics.Models
 
         public TriangleGeometry FlangeTriangle { get; private set; }
 
-        public List<IEnumerable<PointEx>> PointsCollection { get; private set; }
+        public List<IEnumerable<ShapePoint>> PointsCollection { get; private set; }
 
         #endregion
 
@@ -88,19 +88,19 @@ namespace ReInvented.Graphics.Models
 
             #region Geometry Points
 
-            List<PointEx> shapePoints = new List<PointEx>
+            List<ShapePoint> shapePoints = new List<ShapePoint>
             {
-                new PointEx(0, 0, PathSegmentType.Line),
-                new PointEx(B, 0, PathSegmentType.Line)
+                new ShapePoint(0, 0, PathSegmentType.Line),
+                new ShapePoint(B, 0, PathSegmentType.Line)
             };
 
-            shapePoints.Add(new PointEx(B, Tf - heightAtFlangeThickness - ToeGeometry.LargeTriangle.Adjacent, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(B, Tf - heightAtFlangeThickness - ToeGeometry.LargeTriangle.Adjacent, PathSegmentType.Line));
 
             #region Toe - Top
 
             if (ToeRadius > 0)
             {
-                shapePoints.Add(new PointEx(B - (ToeRadius - ToeGeometry.LargeTriangle.Opposite), Tf - heightAtFlangeThickness, PathSegmentType.Arc)
+                shapePoints.Add(new ShapePoint(B - (ToeRadius - ToeGeometry.LargeTriangle.Opposite), Tf - heightAtFlangeThickness, PathSegmentType.Arc)
                 {
                     Radius = ToeRadius,
                     SweepDirection = SweepDirection.Clockwise
@@ -109,13 +109,13 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            shapePoints.Add(new PointEx(B - (ToeRadius - ToeGeometry.LargeTriangle.Opposite) - FlangeTriangle.Opposite, Tf - heightAtFlangeThickness + FlangeTriangle.Adjacent, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(B - (ToeRadius - ToeGeometry.LargeTriangle.Opposite) - FlangeTriangle.Opposite, Tf - heightAtFlangeThickness + FlangeTriangle.Adjacent, PathSegmentType.Line));
 
             #region Root - Top
 
             if (RootRadius > 0)
             {
-                shapePoints.Add(new PointEx(Tw, heightAtRootIntersection, PathSegmentType.Arc)
+                shapePoints.Add(new ShapePoint(Tw, heightAtRootIntersection, PathSegmentType.Arc)
                 {
                     Radius = RootRadius,
                     SweepDirection = SweepDirection.Counterclockwise
@@ -124,13 +124,13 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            shapePoints.Add(new PointEx(Tw, H - heightAtRootIntersection, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(Tw, H - heightAtRootIntersection, PathSegmentType.Line));
 
             #region Root - Bottom
 
             if (RootRadius > 0)
             {
-                shapePoints.Add(new PointEx(Tw + (RootRadius - RootGeometry.LargeTriangle.Opposite), H - heightAtRootIntersection + RootGeometry.LargeTriangle.Adjacent, PathSegmentType.Arc)
+                shapePoints.Add(new ShapePoint(Tw + (RootRadius - RootGeometry.LargeTriangle.Opposite), H - heightAtRootIntersection + RootGeometry.LargeTriangle.Adjacent, PathSegmentType.Arc)
                 {
                     Radius = RootRadius,
                     SweepDirection = SweepDirection.Counterclockwise
@@ -139,13 +139,13 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            shapePoints.Add(new PointEx(B - (ToeRadius - ToeGeometry.LargeTriangle.Opposite), H - heightAtRootIntersection + RootGeometry.LargeTriangle.Adjacent + FlangeTriangle.Adjacent, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(B - (ToeRadius - ToeGeometry.LargeTriangle.Opposite), H - heightAtRootIntersection + RootGeometry.LargeTriangle.Adjacent + FlangeTriangle.Adjacent, PathSegmentType.Line));
 
             #region Toe - Bottom
 
             if (ToeRadius > 0)
             {
-                shapePoints.Add(new PointEx(B, H - heightAtRootIntersection + RootGeometry.LargeTriangle.Adjacent + FlangeTriangle.Adjacent + ToeGeometry.LargeTriangle.Adjacent, PathSegmentType.Arc)
+                shapePoints.Add(new ShapePoint(B, H - heightAtRootIntersection + RootGeometry.LargeTriangle.Adjacent + FlangeTriangle.Adjacent + ToeGeometry.LargeTriangle.Adjacent, PathSegmentType.Arc)
                 {
                     Radius = ToeRadius,
                     SweepDirection = SweepDirection.Clockwise
@@ -154,15 +154,15 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            shapePoints.Add(new PointEx(B, H, PathSegmentType.Line));
-            shapePoints.Add(new PointEx(0, H, PathSegmentType.Line));
-            shapePoints.Add(new PointEx(0, H - Tf + heightAtFlangeThickness + ToeGeometry.LargeTriangle.Adjacent, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(B, H, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(0, H, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(0, H - Tf + heightAtFlangeThickness + ToeGeometry.LargeTriangle.Adjacent, PathSegmentType.Line));
 
-            shapePoints.Add(new PointEx(0, 0, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(0, 0, PathSegmentType.Line));
 
             #endregion
 
-            PointsCollection = new List<IEnumerable<PointEx>>
+            PointsCollection = new List<IEnumerable<ShapePoint>>
             {
                 shapePoints
             };

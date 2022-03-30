@@ -64,7 +64,7 @@ namespace ReInvented.Graphics.Models
 
         public CurveDualTriangleGeometry Root => new CurveDualTriangleGeometry(RootRadius, LongLeg.SlopeWithFace, ShortLeg.SlopeWithFace);
 
-        public List<IEnumerable<PointEx>> PointsCollection { get; private set; }
+        public List<IEnumerable<ShapePoint>> PointsCollection { get; private set; }
 
         #endregion
 
@@ -128,15 +128,15 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            List<PointEx> shapePoints = new List<PointEx> { new PointEx(0, 0, PathSegmentType.Line) };
+            List<ShapePoint> shapePoints = new List<ShapePoint> { new ShapePoint(0, 0, PathSegmentType.Line) };
 
-            shapePoints.Add(new PointEx(thicknessAtToeLongLeg, 0, PathSegmentType.Line));
+            shapePoints.Add(new ShapePoint(thicknessAtToeLongLeg, 0, PathSegmentType.Line));
 
             #region Toe - Long Leg
 
             if (LongLeg.Toe.Radius > 0)
             {
-                shapePoints.Add(new PointEx()
+                shapePoints.Add(new ShapePoint()
                 {
                     X = thicknessAtToeLongLeg + LongLeg.Toe.LargeTriangle.Adjacent,
                     Y = LongLeg.Toe.Radius - LongLeg.Toe.LargeTriangle.Opposite,
@@ -150,7 +150,7 @@ namespace ReInvented.Graphics.Models
 
             #region Inclined Face - Long Leg
 
-            shapePoints.Add(new PointEx()
+            shapePoints.Add(new ShapePoint()
             {
                 X = shapePoints[shapePoints.Count - 1].X + LongLeg.MainTriangle.Opposite,
                 Y = shapePoints[shapePoints.Count - 1].Y + LongLeg.MainTriangle.Adjacent,
@@ -163,7 +163,7 @@ namespace ReInvented.Graphics.Models
 
             if (RootRadius > 0)
             {
-                shapePoints.Add(new PointEx()
+                shapePoints.Add(new ShapePoint()
                 {
                     X = shapePoints[shapePoints.Count - 1].X + Root.LongSideLargeTriangle.Adjacent - Root.ShortSideSmallTriangle.Adjacent,
                     Y = shapePoints[shapePoints.Count - 1].Y - Root.LongSideLargeTriangle.Opposite + Root.ShortSideLargeTriangle.Adjacent,
@@ -177,7 +177,7 @@ namespace ReInvented.Graphics.Models
 
             #region Inclined Face - Short Leg
 
-            shapePoints.Add(new PointEx()
+            shapePoints.Add(new ShapePoint()
             {
                 X = shapePoints[shapePoints.Count - 1].X + ShortLeg.MainTriangle.Adjacent,
                 Y = shapePoints[shapePoints.Count - 1].Y + ShortLeg.MainTriangle.Opposite,
@@ -190,7 +190,7 @@ namespace ReInvented.Graphics.Models
 
             if (ShortLeg.Toe.Radius > 0)
             {
-                shapePoints.Add(new PointEx()
+                shapePoints.Add(new ShapePoint()
                 {
                     X = shapePoints[shapePoints.Count - 1].X + ShortLeg.Toe.Radius - ShortLeg.Toe.LargeTriangle.Opposite,
                     Y = shapePoints[shapePoints.Count - 1].Y + ShortLeg.Toe.Radius - ShortLeg.Toe.SmallTriangle.Opposite,
@@ -202,28 +202,28 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            shapePoints.Add(new PointEx()
+            shapePoints.Add(new ShapePoint()
             {
                 X = shapePoints[shapePoints.Count - 1].X,
                 Y = shapePoints[shapePoints.Count - 1].Y + thicknessAtToeShortLeg,
                 PathSegmentType = PathSegmentType.Line
             });
 
-            shapePoints.Add(new PointEx()
+            shapePoints.Add(new ShapePoint()
             {
                 X = shapePoints[shapePoints.Count - 1].X - ShortLeg.Length,
                 Y = shapePoints[shapePoints.Count - 1].Y,
                 PathSegmentType = PathSegmentType.Line
             });
 
-            shapePoints.Add(new PointEx()
+            shapePoints.Add(new ShapePoint()
             {
                 X = shapePoints[shapePoints.Count - 1].X,
                 Y = shapePoints[shapePoints.Count - 1].Y - LongLeg.Length,
                 PathSegmentType = PathSegmentType.Line
             });
 
-            PointsCollection = new List<IEnumerable<PointEx>>()
+            PointsCollection = new List<IEnumerable<ShapePoint>>()
             {
                 shapePoints
             };

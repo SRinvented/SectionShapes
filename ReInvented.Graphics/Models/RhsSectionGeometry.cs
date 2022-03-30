@@ -37,12 +37,12 @@ namespace ReInvented.Graphics.Models
         public double RInner { get; set; }
 
 
-        public List<IEnumerable<PointEx>> PointsCollection { get; private set; }
+        public List<IEnumerable<ShapePoint>> PointsCollection { get; private set; }
 
         public void GeneratePoints()
         {
 
-            PointsCollection = new List<IEnumerable<PointEx>>
+            PointsCollection = new List<IEnumerable<ShapePoint>>
             {
                 /// Points for outer boundary
                 FormulateBoundaryPoints(0, 0, H, B, ROuter),
@@ -53,17 +53,17 @@ namespace ReInvented.Graphics.Models
 
         #region Private Functions
 
-        private List<PointEx> FormulateBoundaryPoints(double xOffset, double yOffset, double height, double width, double curveRadius)
+        private List<ShapePoint> FormulateBoundaryPoints(double xOffset, double yOffset, double height, double width, double curveRadius)
         {
 
-            List<PointEx> boundaryPoints = new List<PointEx>();
+            List<ShapePoint> boundaryPoints = new List<ShapePoint>();
 
-            boundaryPoints.Add(new PointEx(xOffset + curveRadius, yOffset, PathSegmentType.Line));
-            boundaryPoints.Add(new PointEx(xOffset + width - curveRadius, yOffset, PathSegmentType.Line));
+            boundaryPoints.Add(new ShapePoint(xOffset + curveRadius, yOffset, PathSegmentType.Line));
+            boundaryPoints.Add(new ShapePoint(xOffset + width - curveRadius, yOffset, PathSegmentType.Line));
 
             #region Curve - Right Top
 
-            boundaryPoints.Add(new PointEx(xOffset + width, yOffset + curveRadius, PathSegmentType.Arc)
+            boundaryPoints.Add(new ShapePoint(xOffset + width, yOffset + curveRadius, PathSegmentType.Arc)
             {
                 Radius = curveRadius,
                 SweepDirection = SweepDirection.Clockwise
@@ -71,11 +71,11 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            boundaryPoints.Add(new PointEx(xOffset + width, yOffset + height - curveRadius, PathSegmentType.Line));
+            boundaryPoints.Add(new ShapePoint(xOffset + width, yOffset + height - curveRadius, PathSegmentType.Line));
 
             #region Curve - Right Bottom
 
-            boundaryPoints.Add(new PointEx(xOffset + width - curveRadius, yOffset + height, PathSegmentType.Arc)
+            boundaryPoints.Add(new ShapePoint(xOffset + width - curveRadius, yOffset + height, PathSegmentType.Arc)
             {
                 Radius = curveRadius,
                 SweepDirection = SweepDirection.Clockwise
@@ -83,11 +83,11 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            boundaryPoints.Add(new PointEx(xOffset + curveRadius, yOffset + height, PathSegmentType.Line));
+            boundaryPoints.Add(new ShapePoint(xOffset + curveRadius, yOffset + height, PathSegmentType.Line));
 
             #region Curve - Left Bottom
 
-            boundaryPoints.Add(new PointEx(xOffset, yOffset + height - curveRadius, PathSegmentType.Arc)
+            boundaryPoints.Add(new ShapePoint(xOffset, yOffset + height - curveRadius, PathSegmentType.Arc)
             {
                 Radius = curveRadius,
                 SweepDirection = SweepDirection.Clockwise
@@ -95,11 +95,11 @@ namespace ReInvented.Graphics.Models
 
             #endregion
 
-            boundaryPoints.Add(new PointEx(xOffset, yOffset + curveRadius, PathSegmentType.Line));
+            boundaryPoints.Add(new ShapePoint(xOffset, yOffset + curveRadius, PathSegmentType.Line));
 
             #region Curve - Left Top
 
-            boundaryPoints.Add(new PointEx(xOffset + curveRadius, yOffset, PathSegmentType.Arc)
+            boundaryPoints.Add(new ShapePoint(xOffset + curveRadius, yOffset, PathSegmentType.Arc)
             {
                 Radius = curveRadius,
                 SweepDirection = SweepDirection.Clockwise

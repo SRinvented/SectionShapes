@@ -23,13 +23,13 @@ namespace ReInvented.Graphics.Models
 
         public int NumOfPoints { get; set; }
 
-        public List<IEnumerable<PointEx>> PointsCollection { get; private set; }
+        public List<IEnumerable<ShapePoint>> PointsCollection { get; private set; }
 
         public void GeneratePoints()
         {
-            List<PointEx> outerCirclePoints = new List<PointEx>();
+            List<ShapePoint> outerCirclePoints = new List<ShapePoint>();
 
-            List<PointEx> innerCirclePoints = new List<PointEx>();
+            List<ShapePoint> innerCirclePoints = new List<ShapePoint>();
 
             for (int i = 0; i <= NumOfPoints; i++)
             {
@@ -37,7 +37,7 @@ namespace ReInvented.Graphics.Models
 
                 double x = radius + (radius * Math.Cos((i * (360.0 / NumOfPoints)).ToRadians()));
                 double y = radius + (radius * Math.Sin((i * (360.0 / NumOfPoints)).ToRadians()));
-                PointEx point = new PointEx(x, y, PathSegmentType.Arc)
+                ShapePoint point = new ShapePoint(x, y, PathSegmentType.Arc)
                 {
                     Radius = OD / 2,
                     SweepDirection = SweepDirection.Clockwise
@@ -54,7 +54,7 @@ namespace ReInvented.Graphics.Models
                 double x = radius + Tw + (radius * Math.Cos((i * (360.0 / NumOfPoints)).ToRadians()));
                 double y = radius + Tw + (radius * Math.Sin((i * (360.0 / NumOfPoints)).ToRadians()));
 
-                PointEx point = new PointEx(x, y, PathSegmentType.Arc)
+                ShapePoint point = new ShapePoint(x, y, PathSegmentType.Arc)
                 {
                     Radius = (OD - (2 * Tw)) / 2,
                     SweepDirection = SweepDirection.Clockwise
@@ -64,7 +64,7 @@ namespace ReInvented.Graphics.Models
             }
 
 
-            PointsCollection = new List<IEnumerable<PointEx>>
+            PointsCollection = new List<IEnumerable<ShapePoint>>
             {
                 outerCirclePoints,
                 innerCirclePoints

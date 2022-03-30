@@ -70,7 +70,7 @@
     <Compile Include="Models\TriangleGeometry.cs" />
     <Compile Include="Models\CurveTriangleGeometry.cs" />
     <Compile Include="Interfaces\ISectionGeometry.cs" />
-    <Compile Include="Models\PointEx.cs" />
+    <Compile Include="Models\ShapePoint.cs" />
     <Compile Include="ViewModels\ShapeViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
