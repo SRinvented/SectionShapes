@@ -1,18 +1,16 @@
 ﻿namespace ReInvented.Graphics.Models
 {
-    public class AngleLeg
+    public sealed class AngleLeg
     {
         public AngleLeg()
         {
 
         }
 
-        public AngleLeg(double length, double thickness, double slope = 0.0, double toeRadius = 0.0)
+        public AngleLeg(double length, double thickness)
         {
             Length = length;
             Tw = thickness;
-            Slope = slope;
-            ToeRadius = toeRadius;
         }
 
         public double Length { get; set; }

@@ -17,9 +17,14 @@ namespace ReInvented.Graphics.ViewModels
             ///SectionGeometry = new ChsSectionGeometry(150, 12);
             ///SectionGeometry = new RhsSectionGeometry(300, 200, 10, 10, 5);
 
-            ///SectionGeometry = new LSectionGeometry(150, 100, 12, 10, 5, 92);
+            ///SectionGeometry = new LSectionGeometry(150, 100, 12, 10);
 
-            SectionGeometry = new LSectionGeometry(150, 100, 14, 12) { LongLegSlope = 94, ShortLegSlope = 92, RootRadius = 10, LongLegToeRadius = 6, ShortLegToeRadius = 4 };
+            SectionGeometry = new LSectionGeometry()
+            {
+                LongLeg = new AngleLeg() { Length = 150, Tw = 12, Slope = 92, ToeRadius = 0 },
+                ShortLeg = new AngleLeg() { Length = 100, Tw = 10, Slope = 92, ToeRadius = 0 },
+                RootRadius = 25
+            };
 
             PathGeometryBuilder = new PathGeometryBuilder(SectionGeometry);
         }
