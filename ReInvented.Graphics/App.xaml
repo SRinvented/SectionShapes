@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="ReInvented.Graphics.App"
+    x:Class="ReInvented.CrossSections.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:ReInvented.Graphics"
+    xmlns:local="clr-namespace:ReInvented.CrossSections"
     StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>

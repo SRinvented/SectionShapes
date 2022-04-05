@@ -1,4 +1,4 @@
-﻿namespace ReInvented.Graphics.Models
+﻿namespace ReInvented.CrossSections.Models
 {
     public enum PathSegmentType
     {

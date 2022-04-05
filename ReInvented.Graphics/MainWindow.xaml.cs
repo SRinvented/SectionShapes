@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ReInvented.Graphics
+namespace ReInvented.CrossSections
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

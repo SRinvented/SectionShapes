@@ -1,4 +1,4 @@
-﻿namespace ReInvented.Graphics.Models
+﻿namespace ReInvented.CrossSections.Models
 {
     /// <summary>
     /// Stores and retrieves the properties of a leg of an angle section.

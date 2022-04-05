@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Windows.Media;
 
-using ReInvented.Graphics.Interfaces;
+using ReInvented.CrossSections.Interfaces;
 using SRi.XamlUIThickenerApp.Shared;
 
-namespace ReInvented.Graphics.Models
+namespace ReInvented.CrossSections.Models
 {
     /// <summary>
     /// Stores and retrieves dimensional details of the an L/Angle cross section.

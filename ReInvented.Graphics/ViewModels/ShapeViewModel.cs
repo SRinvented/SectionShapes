@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
-using ReInvented.Graphics.Interfaces;
-using ReInvented.Graphics.Models;
+using ReInvented.CrossSections.Interfaces;
+using ReInvented.CrossSections.Models;
 
-namespace ReInvented.Graphics.ViewModels
+namespace ReInvented.CrossSections.ViewModels
 {
     public class ShapeViewModel : INotifyPropertyChanged
     {

@@ -2,7 +2,7 @@
 
 using SRi.XamlUIThickenerApp.Shared;
 
-namespace ReInvented.Graphics.Models
+namespace ReInvented.CrossSections.Models
 {
     /// <summary>
     /// Used to calculate the properties triangles formed by inclined faces at a curve.

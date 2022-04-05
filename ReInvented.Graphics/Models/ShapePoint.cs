@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 
-namespace ReInvented.Graphics.Models
+namespace ReInvented.CrossSections.Models
 {
     public sealed class ShapePoint
     {

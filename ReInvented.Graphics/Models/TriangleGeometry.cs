@@ -2,7 +2,7 @@
 
 using SRi.XamlUIThickenerApp.Shared;
 
-namespace ReInvented.Graphics.Models
+namespace ReInvented.CrossSections.Models
 {
     public class TriangleGeometry
     {

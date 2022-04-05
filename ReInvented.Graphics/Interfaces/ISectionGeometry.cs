@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
 
-using ReInvented.Graphics.Models;
+using ReInvented.CrossSections.Models;
 
-namespace ReInvented.Graphics.Interfaces
+namespace ReInvented.CrossSections.Interfaces
 {
     public interface ISectionGeometry
     {

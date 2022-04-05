@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-using ReInvented.Graphics.Interfaces;
+using ReInvented.CrossSections.Interfaces;
 
-namespace ReInvented.Graphics.Models
+namespace ReInvented.CrossSections.Models
 {
     public class PathGeometryBuilder
     {
