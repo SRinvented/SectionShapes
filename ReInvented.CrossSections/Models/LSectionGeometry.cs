@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Media;
 
 using ReInvented.CrossSections.Interfaces;
+using ReInvented.SectionProfiles.Interfaces;
+using ReInvented.SectionProfiles.Models;
+
 using SRi.XamlUIThickenerApp.Shared;
 
 namespace ReInvented.CrossSections.Models
@@ -47,6 +50,10 @@ namespace ReInvented.CrossSections.Models
             };
         }
 
+        public LSectionGeometry(IRolledSection angleSection)
+        {
+            InitializeProperties(angleSection as RolledSectionLShape);
+        }
 
         #endregion
 
@@ -228,6 +235,30 @@ namespace ReInvented.CrossSections.Models
                 shapePoints
             };
 
+        }
+
+        #endregion
+
+        #region Private Helper Methods
+
+        private void InitializeProperties(RolledSectionLShape angleSection)
+        {
+
+            LongLeg = new AngleLeg()
+            {
+                Length = angleSection.L,
+                Tw = angleSection.Tw,
+                ToeRadius = angleSection.R2
+            };
+
+            ShortLeg = new AngleLeg()
+            {
+                Length = angleSection.B,
+                Tw = angleSection.Tw,
+                ToeRadius = angleSection.R2
+            };
+
+            RootRadius = angleSection.R1;
         }
 
         #endregion

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReInvented.CrossSections", "ReInvented.Graphics\ReInvented.CrossSections.csproj", "{B064A3FF-D028-46F4-8838-1B85BFF10395}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReInvented.CrossSections", "ReInvented.CrossSections\ReInvented.CrossSections.csproj", "{B064A3FF-D028-46F4-8838-1B85BFF10395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

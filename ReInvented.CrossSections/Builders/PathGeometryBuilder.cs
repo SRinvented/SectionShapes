@@ -4,8 +4,9 @@ using System.Windows;
 using System.Windows.Media;
 
 using ReInvented.CrossSections.Interfaces;
+using ReInvented.CrossSections.Models;
 
-namespace ReInvented.CrossSections.Models
+namespace ReInvented.CrossSections.Builders
 {
     public class PathGeometryBuilder
     {
@@ -69,8 +70,10 @@ namespace ReInvented.CrossSections.Models
                         pathFigure.Segments.Add(arcSegment);
                     }
                 }
+
                 pathFigures.Add(pathFigure);
             }
+
             pathGeometry.Figures = pathFigures;
 
             return pathGeometry;

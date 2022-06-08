@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
+using ReInvented.CrossSections.Builders;
 using ReInvented.CrossSections.Interfaces;
 using ReInvented.CrossSections.Models;
 

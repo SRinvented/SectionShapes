@@ -58,13 +58,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Builders\PathGeometryBuilder.cs" />
     <Compile Include="Models\AngleLeg.cs" />
     <Compile Include="Models\ChsSectionGeometry.cs" />
     <Compile Include="Models\CurveDualTriangleGeometry.cs" />
     <Compile Include="Models\LSectionGeometry.cs" />
     <Compile Include="Models\CSectionGeometry.cs" />
     <Compile Include="Models\HSectionGeometry.cs" />
-    <Compile Include="Models\PathGeometryBuilder.cs" />
     <Compile Include="Models\PathSegmentType.cs" />
     <Compile Include="Models\RhsSectionGeometry.cs" />
     <Compile Include="Models\TriangleGeometry.cs" />
@@ -115,5 +115,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\SolutionsReInvented\CarryProjects\SRi.SectionsRetriever\ReInvented.SectionProfiles\ReInvented.SectionProfiles.csproj">
+      <Project>{97886FD3-BAC9-4942-A257-D5E05B1D4AB8}</Project>
+      <Name>ReInvented.SectionProfiles</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

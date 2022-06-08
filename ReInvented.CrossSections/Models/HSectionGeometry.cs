@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Media;
 
 using ReInvented.CrossSections.Interfaces;
+using ReInvented.SectionProfiles.Interfaces;
+using ReInvented.SectionProfiles.Models;
 
 using SRi.XamlUIThickenerApp.Shared;
 
@@ -14,6 +16,7 @@ namespace ReInvented.CrossSections.Models
     /// </summary>
     public sealed class HSectionGeometry : ISectionGeometry
     {
+
         #region Parameterized Constructor
 
         public HSectionGeometry(double overallDepth, double flangeWidth, double webThickness, double flangeThickness, double rRoot = 0.0, double rToe = 0.0, double flangeSlope = 90.0)
@@ -25,7 +28,12 @@ namespace ReInvented.CrossSections.Models
             RootRadius = rRoot;
             ToeRadius = rToe;
             FlangeSlope = flangeSlope;
-        } 
+        }
+
+        public HSectionGeometry(IRolledSection section)
+        {
+            InitializeProperties(section as RolledSectionHShape);
+        }
 
         #endregion
 
@@ -229,7 +237,22 @@ namespace ReInvented.CrossSections.Models
             {
                 shapePoints
             };
-        } 
+        }
+
+        #endregion
+
+        #region Private Helper Methods
+
+        private void InitializeProperties(RolledSectionHShape section)
+        {
+            H = section.H;
+            B = section.Bf;
+            Tw = section.Tw;
+            Tf = section.Tf;
+            RootRadius = section.R1;
+            ToeRadius = section.R2;
+            FlangeSlope = section.Alpha;
+        }
 
         #endregion
 

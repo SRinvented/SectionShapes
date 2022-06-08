@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Media;
 
 using ReInvented.CrossSections.Interfaces;
-
-using SRi.XamlUIThickenerApp.Shared;
+using ReInvented.SectionProfiles.Interfaces;
+using ReInvented.SectionProfiles.Models;
 
 namespace ReInvented.CrossSections.Models
 {
     public sealed class RhsSectionGeometry : ISectionGeometry
     {
+        #region Parameterized Constructors
+
         public RhsSectionGeometry(double overallDepth, double overallWidth, double wallThicknes)
             : this(overallDepth, overallWidth, wallThicknes, 2 * wallThicknes, 2 * wallThicknes)
         {
@@ -25,6 +26,13 @@ namespace ReInvented.CrossSections.Models
             RInner = innerRadius;
         }
 
+        public RhsSectionGeometry(IRolledSection rhsSection)
+        {
+            InitializeProperties(rhsSection as RolledSectionBoxShape);
+        }
+        #endregion
+
+        #region Public Properties
 
         public double H { get; set; }
 
@@ -36,8 +44,15 @@ namespace ReInvented.CrossSections.Models
 
         public double RInner { get; set; }
 
+        #endregion
+
+        #region Read-only Properties
 
         public List<IEnumerable<ShapePoint>> PointsCollection { get; private set; }
+
+        #endregion
+
+        #region Public Methods
 
         public void GeneratePoints()
         {
@@ -50,6 +65,8 @@ namespace ReInvented.CrossSections.Models
                 FormulateBoundaryPoints(Tw, Tw, H - (2* Tw), B - (2*Tw), RInner)
             };
         }
+
+        #endregion
 
         #region Private Functions
 
@@ -109,6 +126,19 @@ namespace ReInvented.CrossSections.Models
 
             return boundaryPoints;
 
+        }
+
+        #endregion
+
+        #region Private Helper Methods
+
+        private void InitializeProperties(RolledSectionBoxShape rhsSection)
+        {
+            H = rhsSection.H;
+            B = rhsSection.B;
+            Tw = rhsSection.Tw;
+            ROuter = rhsSection.R1;
+            RInner = rhsSection.R2;
         }
 
         #endregion

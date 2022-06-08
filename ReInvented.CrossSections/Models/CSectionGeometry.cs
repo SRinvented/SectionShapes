@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Media;
 
 using ReInvented.CrossSections.Interfaces;
+using ReInvented.SectionProfiles.Interfaces;
+using ReInvented.SectionProfiles.Models;
 
 using SRi.XamlUIThickenerApp.Shared;
 
@@ -25,6 +27,11 @@ namespace ReInvented.CrossSections.Models
             RootRadius = rRoot;
             ToeRadius = rToe;
             FlangeSlope = flangeSlope;
+        }
+
+        public CSectionGeometry(IRolledSection section)
+        {
+            InitializeProperties(section as RolledSectionCShape);
         }
 
         #endregion
@@ -166,6 +173,21 @@ namespace ReInvented.CrossSections.Models
             {
                 shapePoints
             };
+        }
+
+        #endregion
+
+        #region Private Helper Methods
+
+        private void InitializeProperties(RolledSectionCShape channelSection)
+        {
+            H = channelSection.H;
+            B = channelSection.Bf;
+            Tw = channelSection.Tw;
+            Tf = channelSection.Tf;
+            RootRadius = channelSection.R1;
+            ToeRadius = channelSection.R2;
+            FlangeSlope = channelSection.Alpha;
         }
 
         #endregion

@@ -4,11 +4,15 @@ using System.Windows.Media;
 using SRi.XamlUIThickenerApp.Shared;
 
 using ReInvented.CrossSections.Interfaces;
+using ReInvented.SectionProfiles.Interfaces;
+using ReInvented.SectionProfiles.Models;
 
 namespace ReInvented.CrossSections.Models
 {
     public sealed class ChsSectionGeometry : ISectionGeometry
     {
+
+        #region Parameterized Constructors
 
         public ChsSectionGeometry(double outerDiameter, double tw, int numOfPoints = 12)
         {
@@ -17,13 +21,30 @@ namespace ReInvented.CrossSections.Models
             NumOfPoints = numOfPoints;
         }
 
+        public ChsSectionGeometry(IRolledSection chsSection)
+        {
+            InitializeProperties(chsSection as RolledSectionOShape);
+        }
+
+        #endregion
+
+        #region Public Properties
+
         public double OD { get; set; }
 
         public double Tw { get; set; }
 
-        public int NumOfPoints { get; set; }
+        public int NumOfPoints { get; set; } = 12;
+
+        #endregion
+
+        #region Read-only Properties
 
         public List<IEnumerable<ShapePoint>> PointsCollection { get; private set; }
+
+        #endregion
+
+        #region Public Methods
 
         public void GeneratePoints()
         {
@@ -71,24 +92,17 @@ namespace ReInvented.CrossSections.Models
             };
         }
 
-        //private List<PointEx> FormulateBoundaryPoints(double xOffset, double yOffset, double radius, int numOfPoints)
-        //{
-        //    List<PointEx> boundaryPoints = new List<PointEx>();
+        #endregion
 
-        //    for (int i = 0; i <= numOfPoints; i++)
-        //    {
-        //        double x = xOffset + (radius * Math.Cos((i * (360.0 / numOfPoints)).ToRadians()));
-        //        double y = radius + Tw + (radius * Math.Sin((i * (360.0 / numOfPoints)).ToRadians()));
+        #region Private Helper Methods
 
-        //        PointEx point = new PointEx(x, y, PathSegmentType.Arc)
-        //        {
-        //            Radius = (OD - (2 * Tw)) / 2,
-        //            SweepDirection = SweepDirection.Clockwise
-        //        };
+        private void InitializeProperties(RolledSectionOShape chsSection)
+        {
+            OD = chsSection.OD;
+            Tw = chsSection.Tw;
+        }
 
-        //        boundaryPoints.Add(point);
-        //    }
-        //}
+        #endregion
 
     }
 }
